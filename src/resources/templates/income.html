@@ -1,0 +1,742 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.3.1/css/bootstrap.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.3.1/js/bootstrap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+    <style>
+
+        * {
+            margin: 0px;
+            padding: 0px;
+            box-sizing: border-box;
+        }
+
+        body, html {
+            height: 100%;
+        }
+
+        a {
+            margin: 0px;
+            transition: all 0.4s;
+            -webkit-transition: all 0.4s;
+            -o-transition: all 0.4s;
+            -moz-transition: all 0.4s;
+        }
+
+        a:focus {
+            outline: none !important;
+        }
+
+        a:hover {
+            text-decoration: none;
+        }
+
+        h1, h2, h3, h4, h5, h6 {
+            margin: 0px;
+        }
+
+        p {
+            margin: 0px;
+        }
+
+        ul, li {
+            margin: 0px;
+            list-style-type: none;
+        }
+
+        input {
+            display: block;
+            outline: none;
+            border: none !important;
+        }
+
+        textarea {
+            display: block;
+            outline: none;
+        }
+
+        textarea:focus, input:focus {
+            border-color: transparent !important;
+        }
+
+        /* ------------------------------------ */
+        button {
+            outline: none !important;
+            border: none;
+            background: transparent;
+        }
+
+        button:hover {
+            cursor: pointer;
+        }
+
+        iframe {
+            border: none !important;
+        }
+
+        .limiter {
+            width: 100%;
+            margin: 0 auto;
+        }
+
+        .container-table100 {
+            width: 100%;
+            min-height: 100vh;
+            background: #1f254b;
+
+            display: -webkit-box;
+            display: -webkit-flex;
+            display: -moz-box;
+            display: -ms-flexbox;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-wrap: wrap;
+            padding: 33px 30px;
+            padding-top: 150px;
+            padding-bottom: 150px;
+        }
+
+        .wrap-table100 {
+            width: 1310px;
+            display: flex;
+            justify-content: space-between;
+        }
+
+        table {
+            border-spacing: 1px;
+            border-collapse: collapse;
+            background: white;
+            border-radius: 10px;
+            overflow: hidden;
+            width: 100%;
+            margin: 0 auto;
+            position: relative;
+            flex: 1; /* Make table occupy available space */
+            margin-right: 20px; /* Add spacing between table and form */
+        }
+
+        table * {
+            position: relative;
+        }
+
+        table td, table th {
+            padding-left: 8px;
+        }
+
+        table thead tr {
+            height: 60px;
+            background: #36304a;
+        }
+
+        table tbody tr {
+            height: 50px;
+        }
+
+        table tbody tr:last-child {
+            border: 0;
+        }
+
+        table td.l, table th.l {
+            text-align: right;
+        }
+
+        table td.c, table th.c {
+            text-align: center;
+        }
+
+        table td.r, table th.r {
+            text-align: center;
+        }
+
+        /*.table100-head{*/
+        /*    position: fixed;*/
+
+        /*    width: 83%;*/
+        /*    z-index: 10;*/
+        /*}*/
+
+        .table100-head th {
+
+            font-size: 18px;
+            color: #fff;
+            line-height: 1.2;
+            font-weight: unset;
+        }
+
+        tbody tr:nth-child(even) {
+            background-color: #f5f5f5;
+        }
+
+        tbody tr {
+            font-size: 17px;
+            color: #494949;
+            line-height: 1.2;
+            font-weight: unset;
+        }
+
+        tbody tr:hover {
+            color: #555555;
+            background-color: #f5f5f5;
+            cursor: pointer;
+        }
+
+        .purchase_date {
+            text-align: center;
+            width: 200px;
+        }
+
+        .marketplace_code {
+            text-align: center;
+            width: 100px;
+        }
+
+        .column3 {
+            width: 100px;
+            text-align: left;
+        }
+
+        .name {
+            width: 300px;
+            text-align: center;
+
+        }
+
+        .inner_id {
+            width: 100px;
+            text-align: center;
+        }
+
+        .wb_id {
+            width: 100px;
+            text-align: center;
+        }
+
+        .yandex_id {
+            text-align: center;
+            width: 100px;
+        }
+
+        .ozon_id {
+            width: 100px;
+            text-align: center;
+        }
+
+        .region_id {
+            width: 100px;
+            text-align: center;
+        }
+
+        .price {
+            width: 300px;
+            text-align: center;
+        }
+
+        @media screen and (max-width: 992px) {
+            table {
+                display: block;
+            }
+
+            table > *, table tr, table td, table th {
+                display: block;
+            }
+
+            table thead {
+                display: none;
+            }
+
+            table tbody tr {
+                height: auto;
+                padding: 37px 0;
+            }
+
+            table tbody tr td {
+                padding-left: 40% !important;
+                margin-bottom: 24px;
+            }
+
+            table tbody tr td:last-child {
+                margin-bottom: 0;
+            }
+
+            table tbody tr td:before {
+                font-size: 14px;
+                color: #999999;
+                line-height: 1.2;
+                font-weight: unset;
+                position: absolute;
+                width: 40%;
+                left: 30px;
+                top: 0;
+            }
+
+            table tbody tr td:nth-child(1):before {
+                content: "Дата";
+            }
+
+            table tbody tr td:nth-child(2):before {
+                content: "Площадка";
+            }
+
+            table tbody tr td:nth-child(3):before {
+                content: "Название";
+            }
+
+            table tbody tr td:nth-child(4):before {
+                content: "Артикул";
+            }
+
+            table tbody tr td:nth-child(5):before {
+                content: "Артикул WB";
+            }
+
+            table tbody tr td:nth-child(6):before {
+                content: "Артикул YandexMarket";
+            }
+
+            table tbody tr td:nth-child(7):before {
+                content: "Артикул Ozon";
+            }
+
+            table tbody tr td:nth-child(8):before {
+                content: "Регион";
+            }
+
+            table tbody tr td:nth-child(9):before {
+                content: "Цена";
+            }
+
+            .inner_id,
+            .wb_id {
+                text-align: left;
+            }
+
+            .inner_id,
+            .wb_id,
+            .yandex_id,
+            .purchase_date,
+            .marketplace_code,
+            .column3 {
+                width: 100%;
+            }
+
+            tbody tr {
+                font-size: 14px;
+            }
+        }
+
+        @media (max-width: 576px) {
+            .container-table100 {
+                padding-left: 15px;
+                padding-right: 15px;
+            }
+        }
+
+        .site-header {
+            background-color: #36304a;
+            color: #fff;
+            padding: 10px;
+            text-align: center;
+            font-size: 18px;
+            line-height: 1.2;
+            font-weight: unset;
+            position: fixed;
+            top: 0;
+            width: 100%;
+            z-index: 10;
+
+        }
+
+        .site-header a {
+            color: #fff;
+            text-decoration: none;
+            margin: 0 0px;
+            margin-right: 50px;
+            transition: color 0.1s ease-in-out;
+
+        }
+
+        .site-header a:hover {
+            color: #9f9999;
+        }
+
+        .table100 td {
+            text-align: center;
+        }
+
+        .form-container {
+
+            width: 300px; /* Ширина формы */
+            height: 550px;
+            margin-left: 20px; /* Отступ слева */
+            background-color: #36304a;
+            color: #fff;
+            border: none;
+            border-radius: 10px;
+            padding: 10px 20px;
+            font-size: 16px;
+            cursor: pointer;
+        }
+
+        .form-container .form-group {
+
+            margin-bottom: 15px;
+        }
+
+        .form-container label {
+
+            display: block;
+            margin-bottom: 5px;
+            color: white; /* Делаем текст меток зеленым */
+        }
+
+        .form-container input[type="date"] {
+
+            width: 100%;
+            padding: 8px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+
+        .form-container textarea {
+            width: 100%;
+            height: 100px;
+            padding: 8px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            resize: vertical;
+        }
+
+        table .total-row {
+            border: 2px solid #36304a;
+        }
+
+    </style>
+    <title>Выручка</title>
+    <meta charset="UTF-8">
+    <link rel="icon" type="image/png" th:href="@{/pic.png}" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+</head>
+<script>
+
+    var counter = 1;
+    var total = 0;
+    var data = [
+        ["Название", "Артикул", "Артикул WB", "Артикул YandexMarket", "Артикул Ozon", "Количество покупок", "Общая сумма"]
+    ];
+
+    var excelConst = false;
+
+    function generateExcelFile(data, startDate, endDate, markets, type) {
+        const workbook = XLSX.utils.book_new();
+        const worksheet = XLSX.utils.aoa_to_sheet(data);
+        XLSX.utils.book_append_sheet(workbook, worksheet, "Sheet1");
+        const excelBuffer = XLSX.write(workbook, {bookType: 'xlsx', type: 'array'});
+        const blob = new Blob([excelBuffer], {type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'});
+        const url = window.URL.createObjectURL(blob);
+        const link = document.createElement('a');
+        link.href = url;
+        link.setAttribute('download', 'Покупки_по_' + type + '_c_' + startDate + '_по_' + endDate + '_' + markets + '.xlsx');
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+    }
+
+    function loadPurchases(endpoint, sortPurchaseRqDto, startDateParam, endDateParam, markets, regionType) {
+        const now = new Date();
+        const lastMonth = new Date();
+        lastMonth.setMonth(now.getMonth() - 60);
+
+        const after = lastMonth.toISOString();
+        const before = now.toISOString();
+
+        $.ajax({
+            url: endpoint,
+            method: "POST",
+            contentType: 'application/json',
+            data: JSON.stringify(sortPurchaseRqDto),
+            success: function (data) {
+                var data1 = data;
+                for (var i = 0; i < data1.length; i++) {
+                    addPurchaseRow(data1[i], endpoint)
+                }
+                addResultRow(startDateParam, endDateParam, markets, regionType)
+            },
+        });
+    }
+
+    function addResultRow(startDateParam, endDateParam, markets, regionType) {
+        const tbody = document.getElementById('purchaseTableBody');
+        const row = tbody.insertRow();
+
+        const dateCell = row.insertCell();
+        const marketplaceCell = row.insertCell();
+        const nameCell = row.insertCell();
+        const innerIdCell = row.insertCell();
+        const wbIdCell = row.insertCell();
+        const yandexIdCell = row.insertCell();
+        const ozonIdCell = row.insertCell();
+        const regionIdCell = row.insertCell();
+        const priceCell = row.insertCell();
+        priceCell.textContent = total + ".00";
+        row.classList.add('total-row');
+        priceCell.style.textAlign = "right"
+        data.push(["", "", "", "", "", "", total + ".00"]);
+        if (excelConst) {
+            generateExcelFile(data, startDateParam, endDateParam, markets, regionType);
+            excelConst = false;
+        }
+        data = [
+            ["Название", "Артикул", "Артикул WB", "Артикул YandexMarket", "Артикул Ozon", "Количество покупок", "Общая сумма"]
+        ];
+        total = 0;
+    }
+
+    function addPurchaseRow(data1, endpoint) {
+
+        const excelLine = [];
+
+        const tbody = document.getElementById('purchaseTableBody');
+        const row = tbody.insertRow();
+
+        const dateCell = row.insertCell();
+        const marketplaceCell = row.insertCell();
+        const nameCell = row.insertCell();
+        const innerIdCell = row.insertCell();
+        const wbIdCell = row.insertCell();
+        const yandexIdCell = row.insertCell();
+        const ozonIdCell = row.insertCell();
+        const regionIdCell = row.insertCell();
+        const priceCell = row.insertCell();
+        dateCell.textContent = counter;
+        marketplaceCell.textContent = data1.marketplaceCode;
+        excelLine.push(data1.name);
+        innerIdCell.textContent = data1.innerId;
+        excelLine.push(data1.innerId);
+        regionIdCell.textContent = data1.number
+        priceCell.textContent = data1.sum + ".00";
+        dateCell.style.textAlign = "center";
+
+        const wbLink = document.createElement('a');
+        wbLink.href = 'https://www.wildberries.ru/catalog/' + data1.wildberriesId + '/detail.aspx';
+        wbLink.textContent = data1.wildberriesId;
+        excelLine.push(data1.wildberriesId);
+        wbIdCell.appendChild(wbLink);
+
+        const yandexLink = document.createElement('a');
+        yandexLink.href = 'https://market.yandex.ru/pr/' + data1.yandexId;
+        yandexLink.textContent = data1.yandexId;
+        excelLine.push(data1.yandexId);
+        yandexIdCell.appendChild(yandexLink);
+
+        const ozonLink = document.createElement('a');
+        ozonLink.href = 'https://www.ozon.ru/product/' + data1.ozonId;
+        ozonLink.textContent = data1.ozonId;
+        priceCell.style.textAlign = "right";
+        excelLine.push(data1.ozonId);
+        ozonIdCell.appendChild(ozonLink);
+
+        excelLine.push(data1.number);
+        excelLine.push(data1.sum + ".00");
+
+        if (endpoint === "/api/purchase/sorted/region") {
+            const nameLink = document.createElement('a');
+            nameLink.href = '/purchases?region=' + data1.name + '&before=' + data1.before + '&after=' + data1.after;
+            nameLink.textContent = data1.name;
+            nameCell.appendChild(nameLink);
+        } else {
+            nameCell.textContent = data1.name;
+        }
+
+        data.push(excelLine);
+
+        counter++;
+        total += data1.sum;
+    }
+
+
+    function getPurchases() {
+        let startDate = $('#startDate').val();
+        let endDate = $('#endDate').val();
+
+        let wbValue = null;
+        let ozonValue = null;
+        let yandexValue = null;
+        let excel = false
+        let markets = "_";
+
+        let sorting = $('#selectionType').val();
+
+        let type = []
+
+        if ($('#wb').is(':checked')) {
+            wbValue = $('#wb').val();
+            type.push(wbValue)
+            markets = markets + "WB_"
+        }
+
+        if ($('#ozon').is(':checked')) {
+            ozonValue = $('#ozon').val();
+            type.push(ozonValue)
+            markets = markets + "OZON_"
+        }
+
+        if ($('#yandex').is(':checked')) {
+            yandexValue = $('#yandex').val();
+            type.push(yandexValue)
+            markets = markets + "YANDEX_"
+        }
+
+        if ($('#excel').is(':checked')) {
+            excel = true;
+            excelConst = true;
+        }
+
+        if ((startDate !== "" && endDate !== "") && !(wbValue == null && ozonValue == null && yandexValue == null)) {
+            var startDateParam = startDate;
+            var endDateParam = endDate;
+            startDate = startDate + "T00:00:00";
+            endDate = endDate + "T23:59:59";
+
+            const request = {after: startDate, before: endDate, marketplaceCode: type, excel: excel}
+
+            $('#purchaseTableBody').empty();
+            counter = 1;
+
+            var regionType = "регионам";
+            var goodType = "товарам";
+
+            if (sorting === "good") {
+                loadPurchases("/api/purchase/sorted/income", request, startDateParam, endDateParam, markets, goodType);
+            } else {
+                loadPurchases("/api/purchase/sorted/region", request, startDateParam, endDateParam, markets, regionType);
+            }
+
+        } else {
+            var popup = document.createElement("div");
+            popup.innerHTML = "Необходимо указать: дату начала, дату окончания и минмум одну платформу";
+            popup.style.position = "fixed";
+            popup.style.top = "10px";
+            popup.style.left = "50%";
+            popup.style.transform = "translateX(-50%)";
+            popup.style.padding = "10px";
+            popup.style.background = "red";
+            popup.style.color = "#fff";
+            popup.style.fontSize = "20px";
+            popup.style.zIndex = "9999";
+
+            document.body.appendChild(popup);
+
+            popup.style.opacity = 1;
+
+            setTimeout(function () {
+                var opacity = 1;
+                var fadeOutTimer = setInterval(function () {
+                    if (opacity <= 0) {
+                        clearInterval(fadeOutTimer);
+                        popup.remove();
+                    } else {
+                        opacity -= 0.1;
+                        popup.style.opacity = opacity;
+                    }
+                }, 50);
+            }, 1800);
+        }
+    }
+
+</script>
+<body>
+<div class="site-header">
+    <a href="/graph/income">График выручки</a>
+    <a href="/graph/item">График товаров</a>
+    <a href="/list">Список заказов</a>
+    <a href="/list/search">Поиск заказов</a>
+    <a href="/income">Выручка</a>
+    <a href="/add">Добавить товар</a>
+</div>
+<div class="limiter">
+    <div class="container-table100">
+        <div class="wrap-table100">
+            <div class="table100">
+                <table>
+                    <thead>
+                    <tr class="table100-head">
+                        <th class="purchase_date"></th>
+                        <th class="marketplace_code"></th>
+                        <th class="name">Название</th>
+                        <th class="inner_id">Артикул</th>
+                        <th class="wb_id">Артикул WB</th>
+                        <th class="yandex_id">Артикул YandexMarket</th>
+                        <th class="ozon_id">Артикул Ozon</th>
+                        <th class="region_id">Количество покупок</th>
+                        <th class="price">Общая сумма</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tbody id="purchaseTableBody">
+                    </tbody>
+                </table>
+            </div>
+            <div class="form-container">
+                <h4 class="text-center">Параметры</h4>
+                <form>
+                    <div class="form-group">
+                        <label for="startDate">Дата начала:</label>
+                        <input type="date" class="form-control" id="startDate">
+                    </div>
+                    <div class="form-group">
+                        <label for="endDate">Дата окончания:</label>
+                        <input type="date" class="form-control" id="endDate">
+                    </div>
+                    <div class="form-group">
+                        <label>Платформы:</label>
+                        <div>
+                            <input type="checkbox" id="wb" name="platforms" value="WILDBERRIES">
+                            <label for="wb">WB</label>
+                        </div>
+                        <div>
+                            <input type="checkbox" id="ozon" name="platforms" value="OZON">
+                            <label for="ozon">Ozon</label>
+                        </div>
+                        <div>
+                            <input type="checkbox" id="yandex" name="platforms" value="YANDEX">
+                            <label for="yandex">Yandex</label>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Тип выборки:</label>
+                        <select id="selectionType" class="form-control">
+                            <option value="good">По товарам</option>
+                            <option value="region">По регионам</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <div>
+                            <input type="checkbox" id="excel" name="platforms" value="excel">
+                            <label for="excel">Загрузить Excel-файл</label>
+                        </div>
+                    </div>
+                    <button type="button" onclick="getPurchases()" class="btn btn-primary btn-block">Отправить</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+<!--===============================================================================================-->
+<script src="vendor/jquery/jquery-3.2.1.min.js"></script>
+<!--===============================================================================================-->
+<script src="vendor/bootstrap/js/popper.js"></script>
+<script src="vendor/bootstrap/js/bootstrap.min.js"></script>
+<!--=======================================================\========================================-->
+<script src="vendor/select2/select2.min.js"></script>
+<!--===============================================================================================-->
+<script src="js/main.js"></script>
+
+<script type="text/javascript"></script>
+</body>
+</html>

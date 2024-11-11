@@ -1,0 +1,88 @@
+server:
+  port: 8090
+spring:
+  datasource:
+    url: jdbc:h2:mem:testdb;NON_KEYWORDS=user
+    username: "sa"
+#  datasource:
+#    url: jdbc:postgresql://localhost:5433/db
+#    username: postgres
+#    password: postgres
+  h2:
+    console:
+      enabled: true
+      path: /h2-console
+  jpa:
+    generate-ddl: false
+    hibernate:
+      ddl-auto: none
+    show-sql: true
+    defer-datasource-initialization: true
+  sql:
+    init:
+      schema-locations: classpath:schema.sql
+      data-locations: classpath:data.sql
+      mode: always
+  application:
+    name: web-application
+  boot:
+    admin:
+      client:
+        url: http://localhost:8080
+        enabled: true
+        auto-registration: true
+        instance:
+          name: ${spring.application.name}
+          prefer-ip: true
+          metadata:
+            user.name:
+            user.password:
+        username:
+        password:
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"
+
+
+
+#server:
+#  port: 8090
+#spring:
+#  datasource:
+#    url: jdbc:h2:mem:testdb;NON_KEYWORDS=user
+#    username: "sa"
+#  h2:
+#    console:
+#      enabled: true
+#      path: /h2-console
+#  jpa:
+#    generate-ddl: false
+#    hibernate:
+#      ddl-auto: none
+#    show-sql: true
+#    defer-datasource-initialization: true
+#  sql:
+#    init:
+#      schema-locations: classpath:schema.sql
+#      data-locations: classpath:data.sql
+#      mode: always
+#  application:
+#    name: gerbarika-web-application
+#  boot:
+#    admin:
+#      client:
+#        url: http://localhost:9090
+#        enabled: true
+#        auto-registration: true
+#        instance:
+#          name: ${spring.application.name}
+#          prefer-ip: true
+#        username: admin
+#        password: password
+#management:
+#  endpoints:
+#    web:
+#      exposure:
+#        include: "*"

@@ -1,0 +1,304 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.3.1/css/bootstrap.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.3.1/js/bootstrap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+    <script src="https://cdn.anychart.com/releases/8.10.0/js/anychart-bundle.min.js"></script>
+    <script src="vendor/jquery/jquery-3.2.1.min.js"></script>
+    <script src="vendor/bootstrap/js/popper.js"></script>
+    <script src="vendor/bootstrap/js/bootstrap.min.js"></script>
+    <script src="vendor/select2/select2.min.js"></script>
+    <script src="js/main.js"></script>
+    <title>График выручки</title>
+    <meta charset="UTF-8">
+    <link rel="icon" type="image/png" th:href="@{/pic.png}"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+</head>
+<style>
+    body {
+        background-color: #1f254b;
+        color: #fff; /* Опционально: для изменения цвета текста на более читаемый */
+    }
+
+    .site-header {
+        background-color: #36304a;
+        color: #fff;
+        padding: 10px;
+        text-align: center;
+        font-size: 18px;
+        line-height: 1.2;
+        font-weight: unset;
+        position: fixed;
+        top: 0;
+        width: 100%;
+        z-index: 10;
+
+    }
+
+    .site-header a {
+        color: #fff;
+        text-decoration: none;
+        margin: 0 0px;
+        margin-right: 50px;
+        transition: color 0.1s ease-in-out;
+
+    }
+
+    .site-header a:hover {
+        color: #9f9999;
+    }
+
+
+    .form-container {
+
+        width: 300px; /* Ширина формы */
+        height: 680px;
+        margin-left: 1520px; /* Отступ слева */
+        margin-top: -500px;
+        background-color: #36304a;
+        color: #fff;
+        border: none;
+        border-radius: 10px;
+        padding: 10px 20px;
+        font-size: 16px;
+        cursor: pointer;
+    }
+
+    .form-container .form-group {
+
+        margin-bottom: 15px;
+    }
+
+    .form-container label {
+
+        display: block;
+        margin-bottom: 5px;
+        color: white;
+    }
+
+    .form-container input[type="date"] {
+
+        width: 100%;
+        padding: 8px;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+    }
+
+    .form-container textarea {
+        width: 100%;
+        height: 100px;
+        padding: 8px;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+        resize: vertical;
+    }
+</style>
+<body>
+
+<div class="site-header">
+    <a href="/graph/income">График выручки</a>
+    <a href="/graph/item">График товаров</a>
+    <a href="/list">Список заказов</a>
+    <a href="/list/search">Поиск заказов</a>
+    <a href="/income">Выручка</a>
+    <a href="/add">Добавить товар</a>
+</div>
+
+
+<div class="limiter">
+    <div class="container-table100">
+        <div class="container">
+            <h2>График выручки</h2>
+            <div id="container" style="width: 100%; height: 500px;"></div>
+        </div>
+        <div class="form-container">
+            <h4 class="text-center">Параметры</h4>
+            <form>
+                <div class="form-group">
+                    <label for="startDateFirst">Дата начала периода:</label>
+                    <input type="date" class="form-control" id="startDateFirst">
+                </div>
+                <div class="form-group">
+                    <label for="endDateFirst">Дата окончания периода:</label>
+                    <input type="date" class="form-control" id="endDateFirst">
+                </div>
+
+                <div class="form-group">
+                    <label for="itemId">Идентификатор товара:</label>
+                    <input type="text" class="form-control" id="itemId" placeholder="Введите идентификатор">
+                </div>
+
+                <div class="form-group">
+                    <label>Платформы:</label>
+                    <div>
+                        <input type="checkbox" id="wb" name="platforms" value="WILDBERRIES">
+                        <label for="wb">WB</label>
+                    </div>
+                    <div>
+                        <input type="checkbox" id="ozon" name="platforms" value="OZON">
+                        <label for="ozon">Ozon</label>
+                    </div>
+                    <div>
+                        <input type="checkbox" id="yandex" name="platforms" value="YANDEX">
+                        <label for="yandex">Yandex</label>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label>Тип выборки:</label>
+                    <select id="selectionType" class="form-control">
+                        <option value="day">По дням</option>
+                        <option value="month">По месяцам</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <div style="display: flex; align-items: center;">
+                        <input type="checkbox" id="regions" name="regions" value="REGIONS">
+                        <label for="regions" style="margin-left: 10px;">Загрузить регионы</label>
+                    </div>
+                </div>
+                <button type="button" onclick="getData()" class="btn btn-primary btn-block">Отправить</button>
+            </form>
+        </div>
+    </div>
+</div>
+
+<script>
+
+    function getData() {
+
+        let startDateFirst = $('#startDateFirst').val();
+        let endDateFirst = $('#endDateFirst').val();
+
+        let id = $('#itemId').val();
+
+        let wbValue = null;
+        let ozonValue = null;
+        let yandexValue = null;
+        let markets = []
+        let regions = false
+        if ($('#wb').is(':checked')) {
+            wbValue = $('#wb').val();
+            markets.push(wbValue)
+        }
+
+        if ($('#ozon').is(':checked')) {
+            ozonValue = $('#ozon').val();
+            markets.push(ozonValue)
+        }
+
+        if ($('#yandex').is(':checked')) {
+            yandexValue = $('#yandex').val();
+            markets.push(yandexValue)
+        }
+
+        if ($('#regions').is(':checked')) {
+            regions = true
+        }
+
+        let sorting = $('#selectionType').val();
+
+        if ((startDateFirst !== "" && endDateFirst !== "" && id !== "") && !(wbValue == null && ozonValue == null && yandexValue == null)) {
+            $('#container').empty();
+
+            startDateFirst = startDateFirst + "T00:00:00";
+            endDateFirst = endDateFirst + "T23:59:59";
+
+            if (sorting === "day") {
+                buildGraph(startDateFirst, endDateFirst, markets, sorting, id);
+            } else {
+                buildGraph(startDateFirst, endDateFirst, markets, "month", id);
+            }
+
+            if (regions) {
+
+            }
+
+        } else {
+            var popup = document.createElement("div");
+            popup.innerHTML = "Необходимо указать: дату начала периода, идентификатор и минмум одну платформу";
+            popup.style.position = "fixed";
+            popup.style.top = "10px";
+            popup.style.left = "50%";
+            popup.style.transform = "translateX(-50%)";
+            popup.style.padding = "10px";
+            popup.style.background = "red";
+            popup.style.color = "#fff";
+            popup.style.fontSize = "20px";
+            popup.style.zIndex = "9999";
+
+            document.body.appendChild(popup);
+
+            popup.style.opacity = 1;
+
+            setTimeout(function () {
+                var opacity = 1;
+                var fadeOutTimer = setInterval(function () {
+                    if (opacity <= 0) {
+                        clearInterval(fadeOutTimer);
+                        popup.remove();
+                    } else {
+                        opacity -= 0.1;
+                        popup.style.opacity = opacity;
+                    }
+                }, 50);
+            }, 3300);
+        }
+
+    }
+
+    function buildGraph(after, before, markets, sort, innerId) {
+        var data1 = loadData(after, before, markets, sort, innerId)
+
+        var chart = anychart.line();
+        chart.line(data1).name("Покупок");
+        chart.container('container');
+        chart.draw();
+
+    }
+
+    function loadData(after, before, markets, sort, innerId) {
+        const request = {after: after, before: before, marketplaceCode: markets, innerId: innerId}
+
+        var result = []
+
+        $.ajax({
+            url: '/api/data/item/' + sort,
+            method: 'POST',
+            contentType: 'application/json',
+            data: JSON.stringify(request),
+            async: false,
+            success: function (data) {
+                for (let i = 0; i < data.length; i++) {
+                    result.push([data[i].name, data[i].sum])
+                }
+            }
+        });
+
+        return result
+    }
+</script>
+
+<script type="text/javascript">
+    // anychart.onDocumentReady(function () {
+    //
+    //     var after = new Date()
+    //     var before = new Date()
+    //
+    //     after.setDate(after.getDate() - 30)
+    //
+    //
+    //     let startDate1 = after.toISOString().split('T')[0] + "T00:00:00";
+    //     let endDate1 = before.toISOString().split('T')[0] + "T23:59:59";
+    //
+    //     const markets = ["WILDBERRIES", "OZON", "YANDEX"]
+    //
+    //     buildGraph(startDate1, endDate1, markets, 'day', 100002)
+    // });
+</script>
+</body>
+</html>

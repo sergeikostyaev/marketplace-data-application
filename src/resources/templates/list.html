@@ -1,0 +1,502 @@
+<html lang="en">
+<head>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.3.1/css/bootstrap.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.3.1/js/bootstrap.min.js"></script>
+    <style>
+
+        * {
+            margin: 0px;
+            padding: 0px;
+            box-sizing: border-box;
+        }
+
+        body, html {
+            height: 100%;
+        }
+
+        a {
+            margin: 0px;
+            transition: all 0.4s;
+            -webkit-transition: all 0.4s;
+            -o-transition: all 0.4s;
+            -moz-transition: all 0.4s;
+        }
+
+        a:focus {
+            outline: none !important;
+        }
+
+        a:hover {
+            text-decoration: none;
+        }
+
+        h1, h2, h3, h4, h5, h6 {
+            margin: 0px;
+        }
+
+        p {
+            margin: 0px;
+        }
+
+        ul, li {
+            margin: 0px;
+            list-style-type: none;
+        }
+
+        input {
+            display: block;
+            outline: none;
+            border: none !important;
+        }
+
+        textarea {
+            display: block;
+            outline: none;
+        }
+
+        textarea:focus, input:focus {
+            border-color: transparent !important;
+        }
+
+        /* ------------------------------------ */
+        button {
+            outline: none !important;
+            border: none;
+            background: transparent;
+        }
+
+        button:hover {
+            cursor: pointer;
+        }
+
+        iframe {
+            border: none !important;
+        }
+
+        .limiter {
+            width: 100%;
+            margin: 0 auto;
+        }
+
+        .container-table100 {
+            width: 100%;
+            min-height: 100vh;
+            background: #1f254b;
+
+            display: -webkit-box;
+            display: -webkit-flex;
+            display: -moz-box;
+            display: -ms-flexbox;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-wrap: wrap;
+            padding: 33px 30px;
+            padding-top: 150px;
+            padding-bottom: 150px;
+        }
+
+        .wrap-table100 {
+            width: 1470px;
+        }
+
+        table {
+            border-spacing: 1px;
+            border-collapse: collapse;
+            background: white;
+            border-radius: 10px;
+            overflow: hidden;
+            width: 100%;
+            margin: 0 auto;
+            position: relative;
+        }
+
+        table * {
+            position: relative;
+        }
+
+        table td, table th {
+            padding-left: 8px;
+        }
+
+        table thead tr {
+            height: 60px;
+            background: #36304a;
+        }
+
+        table tbody tr {
+            height: 50px;
+        }
+
+        table tbody tr:last-child {
+            border: 0;
+        }
+
+        table td.l, table th.l {
+            text-align: right;
+        }
+
+        table td.c, table th.c {
+            text-align: center;
+        }
+
+        table td.r, table th.r {
+            text-align: center;
+        }
+
+        /*.table100-head{*/
+        /*    position: fixed;*/
+
+        /*    width: 83%;*/
+        /*    z-index: 10;*/
+        /*}*/
+
+        .table100-head th {
+            font-size: 18px;
+            color: #fff;
+            line-height: 1.2;
+            font-weight: unset;
+        }
+
+        tbody tr:nth-child(even) {
+            background-color: #f5f5f5;
+        }
+
+        tbody tr {
+            font-size: 17px;
+            color: #494949;
+            line-height: 1.2;
+            font-weight: unset;
+        }
+
+        tbody tr:hover {
+            color: #555555;
+            background-color: #f5f5f5;
+            cursor: pointer;
+        }
+
+        .purchase_date {
+            text-align: center;
+            width: 100px;
+        }
+
+        .marketplace_code {
+            text-align: center;
+            width: 100px;
+        }
+
+        .column3 {
+            width: 100px;
+            text-align: left;
+        }
+
+        .name {
+            width: 100px;
+            text-align: center;
+
+        }
+
+        .inner_id {
+            width: 100px;
+            text-align: center;
+        }
+
+        .wb_id {
+            width: 100px;
+            text-align: center;
+        }
+
+        .yandex_id {
+            text-align: center;
+            width: 100px;
+        }
+
+        .ozon_id {
+            width: 100px;
+            text-align: center;
+        }
+
+        .region_id {
+            width: 100px;
+            text-align: center;
+        }
+
+        .price {
+            width: 50px;
+            text-align: center;
+        }
+
+        @media screen and (max-width: 992px) {
+            table {
+                display: block;
+            }
+
+            table > *, table tr, table td, table th {
+                display: block;
+            }
+
+            table thead {
+                display: none;
+            }
+
+            table tbody tr {
+                height: auto;
+                padding: 37px 0;
+            }
+
+            table tbody tr td {
+                padding-left: 40% !important;
+                margin-bottom: 24px;
+            }
+
+            table tbody tr td:last-child {
+                margin-bottom: 0;
+            }
+
+            table tbody tr td:before {
+                font-size: 14px;
+                color: #999999;
+                line-height: 1.2;
+                font-weight: unset;
+                position: absolute;
+                width: 40%;
+                left: 30px;
+                top: 0;
+            }
+
+            table tbody tr td:nth-child(1):before {
+                content: "Дата";
+            }
+
+            table tbody tr td:nth-child(2):before {
+                content: "Площадка";
+            }
+
+            table tbody tr td:nth-child(3):before {
+                content: "Название";
+            }
+
+            table tbody tr td:nth-child(4):before {
+                content: "Артикул";
+            }
+
+            table tbody tr td:nth-child(5):before {
+                content: "Артикул WB";
+            }
+
+            table tbody tr td:nth-child(6):before {
+                content: "Артикул YandexMarket";
+            }
+
+            table tbody tr td:nth-child(7):before {
+                content: "Артикул Ozon";
+            }
+
+            table tbody tr td:nth-child(8):before {
+                content: "Регион";
+            }
+
+            table tbody tr td:nth-child(9):before {
+                content: "Цена";
+            }
+
+            .inner_id,
+            .wb_id {
+                text-align: left;
+            }
+
+            .inner_id,
+            .wb_id,
+            .yandex_id,
+            .purchase_date,
+            .marketplace_code,
+            .column3 {
+                width: 100%;
+            }
+
+            tbody tr {
+                font-size: 14px;
+            }
+        }
+
+        @media (max-width: 576px) {
+            .container-table100 {
+                padding-left: 15px;
+                padding-right: 15px;
+            }
+        }
+
+        .site-header {
+            background-color: #36304a;
+            color: #fff;
+            padding: 10px;
+            text-align: center;
+            font-size: 18px;
+            line-height: 1.2;
+            font-weight: unset;
+            position: fixed;
+            top: 0;
+            width: 100%;
+            z-index: 10;
+
+        }
+
+        .site-header a {
+            color: #fff;
+            text-decoration: none;
+            margin: 0 0px;
+            margin-right: 50px;
+            transition: color 0.1s ease-in-out;
+
+        }
+
+        .site-header a:hover {
+            color: #9f9999;
+        }
+
+        .table100 td {
+            text-align: center;
+        }
+
+        .load-more-button {
+            background-color: #36304a;
+            color: #fff;
+            border: none;
+            border-radius: 10px;
+            padding: 10px 20px;
+            font-size: 16px;
+            cursor: pointer;
+            width: 100%;
+            display: block;
+            margin-top: 20px;
+            text-align: center;
+        }
+
+
+    </style>
+    <title>Список заказов</title>
+    <meta charset="UTF-8">
+    <link rel="icon" type="image/png" th:href="@{/pic.png}" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+</head>
+<script>
+    function loadPurchases(page) {
+        $.ajax({
+            url: "/api/purchase/list?page=" + page,
+            method: "GET",
+            success: function (data) {
+                var purchases = data;
+                for (var i = 0; i < purchases.length; i++) {
+                    addPurchaseRow(purchases[i])
+                }
+            },
+        });
+    }
+
+    // Функция добавления строки в таблицу
+    function addPurchaseRow(purchase) {
+        const tbody = document.getElementById('purchaseTableBody');
+        const row = tbody.insertRow();
+
+        const dateCell = row.insertCell();
+        const marketplaceCell = row.insertCell();
+        const nameCell = row.insertCell();
+        const innerIdCell = row.insertCell();
+        const wbIdCell = row.insertCell();
+        const yandexIdCell = row.insertCell();
+        const ozonIdCell = row.insertCell();
+        const regionIdCell = row.insertCell();
+        const priceCell = row.insertCell();
+        dateCell.textContent = purchase.date;
+        marketplaceCell.textContent = purchase.marketplaceCode;
+        nameCell.textContent = purchase.name;
+        innerIdCell.textContent = purchase.innerId;
+        regionIdCell.textContent = purchase.region;
+        priceCell.textContent = purchase.price + ".00";
+
+        const wbLink = document.createElement('a');
+        wbLink.href = 'https://www.wildberries.ru/catalog/' + purchase.wildberriesId + '/detail.aspx';
+        wbLink.textContent = purchase.wildberriesId;
+        wbIdCell.appendChild(wbLink);
+
+        const yandexLink = document.createElement('a');
+        yandexLink.href = 'https://market.yandex.ru/pr/' + purchase.yandexId;
+        yandexLink.textContent = purchase.yandexId;
+        yandexIdCell.appendChild(yandexLink);
+
+        const ozonLink = document.createElement('a');
+        ozonLink.href = 'https://www.ozon.ru/product/' + purchase.ozonId;
+        ozonLink.textContent = purchase.ozonId;
+        ozonIdCell.appendChild(ozonLink);
+
+
+        priceCell.style.textAlign = "right"
+        dateCell.style.textAlign = "center";
+    }
+
+    // Обработка события для кнопки "Загрузить больше"
+    $(document).ready(function () {
+        var page = 0;
+
+        // Загружаем данные при загрузке страницы
+        loadPurchases(0);
+        page = 1;
+
+        $(".load-more-button").click(function () {
+            loadPurchases(page)
+            page++;
+        });
+    });
+
+</script>
+<body>
+<div class="site-header">
+    <a href="/graph/income">График выручки</a>
+    <a href="/graph/item">График товаров</a>
+    <a href="/list">Список заказов</a>
+    <a href="/list/search">Поиск заказов</a>
+    <a href="/income">Выручка</a>
+    <a href="/add">Добавить товар</a>
+</div>
+<div class="limiter">
+    <div class="container-table100">
+        <div class="wrap-table100">
+            <div class="table100">
+                <table>
+                    <thead>
+                    <tr class="table100-head">
+                        <th class="purchase_date">Дата</th>
+                        <th class="marketplace_code">Площадка</th>
+                        <th class="name">Название</th>
+                        <th class="inner_id">Артикул</th>
+                        <th class="wb_id">Артикул WB</th>
+                        <th class="yandex_id">Артикул YandexMarket</th>
+                        <th class="ozon_id">Артикул Ozon</th>
+                        <th class="region_id">Регион</th>
+                        <th class="price">Цена</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tbody id="purchaseTableBody">
+                    </tbody>
+                </table>
+                <button class="load-more-button">Загрузить еще</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!--===============================================================================================-->
+<script src="vendor/jquery/jquery-3.2.1.min.js"></script>
+<!--===============================================================================================-->
+<script src="vendor/bootstrap/js/popper.js"></script>
+<script src="vendor/bootstrap/js/bootstrap.min.js"></script>
+<!--===============================================================================================-->
+<script src="vendor/select2/select2.min.js"></script>
+<!--===============================================================================================-->
+<script src="js/main.js"></script>
+
+<script type="text/javascript"></script>
+</body>
+</html>
